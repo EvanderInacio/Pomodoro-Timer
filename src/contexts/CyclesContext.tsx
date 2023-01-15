@@ -20,7 +20,7 @@ interface CreateCycleData {
 }
 
 interface CyclesContextType {
-  cycles: Cycle[]
+  cycles: Cycle[] | undefined
   activeCycle: Cycle | undefined
   activeCycleId: string | null
   amountSecondsPassed: number
@@ -37,16 +37,13 @@ interface CyclesContextProviderProps {
   children: ReactNode
 }
 
-export function CyclesContextProvider({
-  children,
-}: CyclesContextProviderProps) {
+export function CyclesContextProvider({ children,}: CyclesContextProviderProps) {
   const [cyclesState, dispatch] = useReducer(
     cyclesReducer,
     {
       cycles: [],
       activeCycleId: null
-    },
-    () => {
+    }, () => {
       const storedStateAsJson = localStorage.getItem(
         '@timer:cycles-state-1.0.0',
       )
