@@ -2,8 +2,8 @@ import styled from 'styled-components'
 
 export const HistoryContainer = styled.main`
   flex: 1;
-  padding: 3.5rem;
-
+  max-width: 100vw;
+  
   display: flex;
   flex-direction: column;
 
@@ -11,6 +11,11 @@ export const HistoryContainer = styled.main`
     font-size: 1.5rem;
     color: ${props => props.theme['gray-100']};
   }
+
+  @media(min-width: 568px) {
+    padding: 3.5rem;
+  }
+
 `
 
 export const HistoryList = styled.div`
