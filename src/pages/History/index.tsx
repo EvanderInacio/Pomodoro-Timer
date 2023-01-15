@@ -1,11 +1,12 @@
 import { useContext } from 'react'
-// import { CyclesContext } from '../../contexts/CyclesContext'
+import { CyclesContext } from '../../contexts/CyclesContext'
 import { formatDistanceToNow } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { HistoryContainer, HistoryList, Status } from './styles'
+import { Footer } from '../../components/Footer'
 
 export function History() {
-  // const { cycles } = useContext(CyclesContext)
+  const { cycles } = useContext(CyclesContext)
 
   return (
     <HistoryContainer>
@@ -22,7 +23,7 @@ export function History() {
             </tr>
           </thead>
           <tbody>
-            {/* {cycles.map(cycle => {
+            {cycles.map(cycle => {
               return (
                 <tr key={cycle.id}>
                   <td>{cycle.task}</td>
@@ -44,10 +45,12 @@ export function History() {
                   </td>
                 </tr>
               )
-            })} */}
+            })}
           </tbody>
         </table>
       </HistoryList>
+
+      <Footer />
     </HistoryContainer>
   )
 }

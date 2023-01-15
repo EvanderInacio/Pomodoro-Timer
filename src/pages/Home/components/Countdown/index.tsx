@@ -59,17 +59,17 @@ export function Countdown() {
     if (activeCycle) {
       document.title = `${activeCycle.task} - ${minutes}:${seconds}`;
     } else {
-      document.title = "Timer Pomodoro";
+      document.title = "Pomodoro Timer";
     }
   }, [minutes, seconds, activeCycle])
 
   return (
     <CountDownContainer>
-    <span>{minutes[0]}</span>
-    <span>{minutes[1]}</span>
-    <Separator>:</Separator>
-    <span>{seconds[0]}</span>
-    <span>{seconds[1]}</span>
-  </CountDownContainer>
+      <span>{minutes[0]}</span>
+      <span>{minutes[1]}</span>
+      <Separator>:</Separator>
+      <span>{seconds[0]}</span>
+      <span>{seconds[1]}</span>
+    </CountDownContainer>
   )
 }
