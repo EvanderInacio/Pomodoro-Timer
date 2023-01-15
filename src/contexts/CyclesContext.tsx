@@ -1,61 +1,60 @@
 import { differenceInSeconds } from 'date-fns'
+import { createContext, useEffect, useReducer, useState } from 'react'
 import {
-  createContext,
-  ReactNode,
-  useEffect,
-  useReducer,
-  useState
-} from 'react'
-import {
-  ActionTypes,
   addNewCycleAction,
   interruptCurrentCycleAction,
   markCurrentCycleAsFinishedAction
 } from '../reducers/cycles/actions'
-import { Cycle, cyclesReducer } from '../reducers/cycles/reducer'
+import { Cycle, cyclesReducer } from '../reducers/cycles/reducers'
+
+interface CycleContextType {
+  cycles: Cycle[]
+  activeCycle: Cycle | undefined
+  activeCycleId: string | null
+  amountSecondsPassed: number
+  markCurrentCycleAsFinished: () => void
+  setSecondsPassed: (secondsPassed: number) => void
+  createNewCycle: (data: CreateCycleData) => void
+  interruptCurrentCycle: () => void
+}
+
+interface CyclesContextProviderProps {
+  children: React.ReactNode
+}
 
 interface CreateCycleData {
   task: string
   minutesAmount: number
 }
 
-interface CyclesContextType {
-  cycles: Cycle[] | undefined
-  activeCycle: Cycle | undefined
-  activeCycleId: string | null
-  amountSecondsPassed: number
+export const CyclesContext = createContext({} as CycleContextType)
 
-  markCurrentCycleAsFinished: () => void
-  setSecondsPassed: (seconds: number) => void
-  createNewCycle: (data: CreateCycleData) => void
-  interruptCurrentCycle: () => void
-}
-
-export const CyclesContext = createContext({} as CyclesContextType)
-
-interface CyclesContextProviderProps {
-  children: ReactNode
-}
-
-export function CyclesContextProvider({ children,}: CyclesContextProviderProps) {
+export function CyclesContextProvider({
+  children
+}: CyclesContextProviderProps) {
   const [cyclesState, dispatch] = useReducer(
     cyclesReducer,
     {
       cycles: [],
       activeCycleId: null
-    }, () => {
-      const storedStateAsJson = localStorage.getItem(
-        '@timer:cycles-state-1.0.0',
+    },
+    () => {
+      const storedStateJSON = localStorage.getItem(
+        '@ignite-timer:cycler-state-1.0.0'
       )
+      if (storedStateJSON) {
+        return JSON.parse(storedStateJSON)
+      }
 
-      if (storedStateAsJson) {
-        return JSON.parse(storedStateAsJson)
+      return {
+        cycles: [],
+        activeCycleId: null
       }
     }
   )
 
   const { cycles, activeCycleId } = cyclesState
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+  const activeCycle = cycles.find(cycle => cycle.id === activeCycleId)
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
     if (activeCycle) {
@@ -68,7 +67,13 @@ export function CyclesContextProvider({ children,}: CyclesContextProviderProps) 
   useEffect(() => {
     const stateJSON = JSON.stringify(cyclesState)
 
-    localStorage.setItem('@timer:cycles-state-1.0.0', stateJSON)
+    localStorage.setItem('@ignite-timer:cycles-state-1.0.0', stateJSON)
+  }, [cyclesState])
+
+  useEffect(() => {
+    const stateJSON = JSON.stringify(cyclesState)
+
+    localStorage.setItem('@ignite-timer:cycler-state-1.0.0', stateJSON)
   }, [cyclesState])
 
   function setSecondsPassed(seconds: number) {

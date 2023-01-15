@@ -1,5 +1,5 @@
 import { differenceInSeconds } from "date-fns";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { CyclesContext } from "../../../../contexts/CyclesContext";
 
 import { CountDownContainer, Separator } from "./styles";
@@ -57,7 +57,9 @@ export function Countdown() {
 
   useEffect(() => {
     if (activeCycle) {
-      document.title = `${minutes}:${seconds}`
+      document.title = `${activeCycle.task} - ${minutes}:${seconds}`;
+    } else {
+      document.title = "Timer Pomodoro";
     }
   }, [minutes, seconds, activeCycle])
 
